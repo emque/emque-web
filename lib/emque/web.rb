@@ -1,5 +1,6 @@
 require "erb"
 require "yaml"
+require "sinatra"
 require "sinatra/base"
 
 module Emque
