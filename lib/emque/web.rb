@@ -3,7 +3,16 @@ require "yaml"
 require "sinatra/base"
 
 module Emque
-  class Web < Sinatra::Base
+  class Web < Sinatra::Base; end
+end
+
+require "emque/web/authentication"
+require "emque/web/configuration"
+require "emque/web/stats"
+require "emque/web/version"
+
+module Emque
+  class Web
     set :root, File.expand_path(File.dirname(__FILE__) + "/../../web")
     set :public_folder, Proc.new { "#{root}/assets" }
     set :views, Proc.new { "#{root}/views" }
@@ -59,6 +68,3 @@ module Emque
   end
 end
 
-require "emque/web/configuration"
-require "emque/web/stats"
-require "emque/web/version"

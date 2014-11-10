@@ -35,7 +35,27 @@ Then configure it to point at the status address for your emque-consuming app(s)
 require "emque/web"
 
 Emque::Web.configure do
-  config.sources = ["localhost:9292", "localhost:10000", ...]
+  config.sources = ["localhost:9292", "localhost:10000"]
+  # ...
+end
+```
+
+## Authentication
+
+Basic auth (via Rack::Auth::Basic) is included, but turned off by default.
+You can enable it in your initializer:
+
+```ruby
+# config/initializers/emque_web.rb
+require "emque/web"
+
+Emque::Web.configure do
+  # ...
+  config.authentication = true
+  # defaults shown, please change them
+  config.username = ""
+  config.password = "password"
+  # ...
 end
 ```
 
