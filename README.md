@@ -1,24 +1,43 @@
 # Emque::Web
 
-TODO: Write a gem description
+A simple administration / monitoring app for emque-consuming applications.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Add this lines to your application's Gemfile:
 
-    gem 'emque-web'
+```ruby
+gem 'emque-web'
+
+# if you require 'sinatra' you get the DSL extended to Object
+gem 'sinatra', '~> 1.3', :require => nil
+```
 
 And then execute:
 
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install emque-web
+```
+$ bundle
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+Add the following to your config/routes.rb:
+
+```ruby
+require "emque/web"
+mount Emque::Web => "/emque"
+```
+
+Then configure it to point at the status address for your emque-consuming app(s)
+
+```ruby
+# config/initializers/emque_web.rb
+require "emque/web"
+
+Emque::Web.configure do
+  config.sources = ["localhost:9292", "localhost:10000", ...]
+end
+```
 
 ## Contributing
 
