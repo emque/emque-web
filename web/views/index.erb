@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <title>Emque Dashboard</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="<%= root_path %>css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="<%= root_path %>css/dashboard.css" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="<%= root_path %>js/bootstrap.min.js"></script>
+    <script src="<%= root_path %>js/lodash.min.js"></script>
+    <script src="<%= root_path %>js/q.js"></script>
+    <script src="<%= root_path %>js/chip.js"></script>
+    <script type="text/javascript">
+      var root = '<%= root_path %>'
+    </script>
+    <script src="<%= root_path %>js/app.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="<%= root_path %>js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Emque Web</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid" bind-controller="status">
+      <small class="label label-info status-update" bind-text="lastUpdate"></small>
+      <div class="row">
+        <div class="col-sm-12 col-md-12 main">
+          <h1 class="page-header">Error Counts</h1>
+          <div class="row placeholders error-counts">
+            <div class="col-xs-4 col-sm-2 placeholder" bind-each="source in data">
+              <div bind-show="source.app == 'unknown'">
+                <span class="status">DOWN</span>
+                <svg width="100" height="100">
+                  <circle cx="50" cy="50" r="50" fill="red"></circle>
+                </svg>
+                <h4 bind-text="source.app"></h4>
+                <span class="text-muted" bind-text="source.host"></span>
+              </div>
+              <div bind-show="source.app != 'unknown'">
+                <span class="count" bind-text="source.errors">-1</span>
+                <svg width="100" height="100">
+                  <circle cx="50" cy="50" r="50" fill="green"></circle>
+                </svg>
+                <h4 bind-text="source.app"></h4>
+                <span class="text-muted" bind-text="source.host"></span>
+              </div>
+            </div>
+          </div>
+
+          <h2 class="sub-header">Topics</h2>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>App</th>
+                  <th>Host</th>
+                  <th>Name</th>
+                  <th># of Workers</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr bind-each="topic in topics">
+                  <td bind-text="topic.app"></td>
+                  <td bind-text="topic.host"></td>
+                  <td bind-text="topic.name"></td>
+                  <td bind-text="topic.workers">2</td>
+                  <td>
+                    <i class="fa fa-plus-square text-success" on-click="up(topic)"></i>
+                    <i class="fa fa-minus-square text-danger" on-click="down(topic)"></i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
