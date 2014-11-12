@@ -7,9 +7,7 @@ module Emque
 
       def initialize(host)
         self.host = host
-        self.workers = {}
-        self.errors = -1
-        self.app = :unknown
+        reset
       end
 
       def status
@@ -22,12 +20,9 @@ module Emque
         }
       end
 
-      def up(topic_name)
+      def clear_errors
         Thread.new {
-          status.join
-          if has_topic?(topic_name)
-            get("/control/#{topic_name}/up", :timeout => 10)
-          end
+          get("/control/errors/clear", :timeout => 10)
         }
       end
 
@@ -36,6 +31,27 @@ module Emque
           status.join
           if has_topic?(topic_name)
             get("/control/#{topic_name}/down", :timeout => 10)
+          end
+        }
+      end
+
+      def threshold_down
+        Thread.new {
+          get("/control/errors/down") rescue reset
+        }
+      end
+
+      def threshold_up
+        Thread.new {
+          get("/control/errors/up", :timeout => 10)
+        }
+      end
+
+      def up(topic_name)
+        Thread.new {
+          status.join
+          if has_topic?(topic_name)
+            get("/control/#{topic_name}/up", :timeout => 10)
           end
         }
       end
@@ -60,8 +76,8 @@ module Emque
 
       private
 
-      attr_accessor :workers
-      attr_writer :errors, :host, :app
+      attr_reader :workers
+      attr_writer :host
 
       def connection
         Faraday.new(:url => 'http://'+host) do |conn|
@@ -90,8 +106,14 @@ module Emque
             workers[key.to_sym] = value
           end
         }
-        @errors = json["errors"]["count"]
+        @errors = json["errors"]
         @app = json["app"]
+      end
+
+      def reset
+        @workers = {}
+        @errors = -1
+        @app = :unknown
       end
     end
   end

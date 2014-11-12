@@ -66,12 +66,20 @@
                 <span class="text-muted" bind-text="source.host"></span>
               </div>
               <div bind-show="source.app != 'unknown'">
-                <span class="count" bind-text="source.errors">-1</span>
+                <span class="count">
+                  <span bind-text="source.errors.count">-1</span>/<span bind-text="source.errors.limit">-1</span>
+                </span>
                 <svg width="100" height="100">
                   <circle cx="50" cy="50" r="50" fill="green"></circle>
                 </svg>
                 <h4 bind-text="source.app"></h4>
                 <span class="text-muted" bind-text="source.host"></span>
+                <div>
+                  <i class="fa fa-minus-square-o text-danger clickable" on-click="thresholdDown(source)"></i>
+                  <span class="text-muted">max</span>
+                  <i class="fa fa-plus-square-o text-success clickable" on-click="thresholdUp(source)"></i>
+                </div>
+                <a class="btn-xs btn-success clickable" bind-if="source.errors.count > 0" on-click="clearErrors(source)">clear error count</a>
               </div>
             </div>
           </div>
@@ -85,7 +93,6 @@
                   <th>Host</th>
                   <th>Name</th>
                   <th># of Workers</th>
-                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -93,10 +100,10 @@
                   <td bind-text="topic.app"></td>
                   <td bind-text="topic.host"></td>
                   <td bind-text="topic.name"></td>
-                  <td bind-text="topic.workers">2</td>
                   <td>
-                    <i class="fa fa-plus-square text-success" on-click="up(topic)"></i>
-                    <i class="fa fa-minus-square text-danger" on-click="down(topic)"></i>
+                    <i class="fa fa-minus-square-o text-danger clickable" on-click="down(topic)"></i>
+                    <span style="font-weight: bolder;" bind-text="topic.workers">-1</span>
+                    <i class="fa fa-plus-square-o text-success clickable" on-click="up(topic)"></i>
                   </td>
                 </tr>
               </tbody>
