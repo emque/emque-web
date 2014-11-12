@@ -10,7 +10,6 @@ end
 require "emque/web/authentication"
 require "emque/web/configuration"
 require "emque/web/stats"
-require "emque/web/version"
 
 module Emque
   class Web

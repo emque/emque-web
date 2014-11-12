@@ -1,11 +1,10 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'emque/web/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "emque-web"
-  spec.version       = Emque::Web::VERSION
+  spec.version       = "0.0.1"
   spec.authors       = ["Dan Matthews"]
   spec.email         = ["dev@teamsnap.com"]
   spec.summary       = %q{A simple web interface for emque administration}
