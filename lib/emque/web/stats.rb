@@ -16,14 +16,9 @@ module Emque
         sources.map(&:to_h)
       end
 
-      def down(host, topic)
-        src = source(host)
-        src.down(topic).join if src
-      end
-
-      def up(host, topic)
-        src = source(host)
-        src.up(topic).join if src
+      def host_action(name, *args)
+        src = source(args.shift)
+        src.send(name, *args) if src
       end
 
       private

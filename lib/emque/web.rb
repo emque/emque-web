@@ -36,16 +36,34 @@ module Emque
       [200, {}, [Oj.dump(Emque::Web::Stats.fetch, :compat => true)]]
     end
 
+    put "/clear_errors" do
+      render_stats do |stats|
+        stats.host_action(:clear_errors, params["host"])
+      end
+    end
+
     put "/down" do
-      stats = Emque::Web::Stats.new
-      stats.down(params["host"], params["topic"])
-      [200, {}, [Oj.dump(stats.status)]]
+      render_stats do |stats|
+        stats.host_action(:down, params["host"], params["topic"])
+      end
+    end
+
+    put "/threshold/down" do
+      render_stats do |stats|
+        stats.host_action(:threshold_down, params["host"])
+      end
+    end
+
+    put "/threshold/up" do
+      render_stats do |stats|
+        stats.host_action(:threshold_up, params["host"])
+      end
     end
 
     put "/up" do
-      stats = Emque::Web::Stats.new
-      stats.up(params["host"], params["topic"])
-      [200, {}, [Oj.dump(stats.status)]]
+      render_stats do |stats|
+        stats.host_action(:up, params["host"], params["topic"])
+      end
     end
 
     # HELPERS
@@ -64,6 +82,14 @@ module Emque
 
     def root_path
       "#{env['SCRIPT_NAME']}/"
+    end
+
+    private
+
+    def render_stats
+      stats = Emque::Web::Stats.new
+      yield stats if block_given?
+      [200, {}, [Oj.dump(stats.status)]]
     end
   end
 end
