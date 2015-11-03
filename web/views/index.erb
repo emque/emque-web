@@ -53,6 +53,7 @@
     <div class="container-fluid" bind-controller="status">
       <small class="label label-info status-update" bind-text="lastUpdate"></small>
       <div class="row">
+        <div class="alert alert-warning" bind-text="errorMessage" bind-show="showErrorMessage"></div>
         <div class="col-sm-12 col-md-12 main">
           <h1 class="page-header">Error Counts</h1>
           <div class="row placeholders error-counts">

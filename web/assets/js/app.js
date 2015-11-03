@@ -144,14 +144,13 @@ EmqueApp.service('status', function() {
   };
 });
 
-/* Controllers */
 EmqueApp.controller('status', function(controller) {
-  var initialize, loadStatus, processStatus,
+  var initialize, loadStatus, processStatus, showErrorMessage,
       statusService = EmqueApp.service('status');
 
   initialize = function() {
     loadStatus();
-    setInterval(loadStatus, 1500);
+    setInterval(loadStatus, 2000);
   };
 
   controller.clearErrors = function(source) {
@@ -190,9 +189,18 @@ EmqueApp.controller('status', function(controller) {
     return statusService.load().then(processStatus);
   };
 
+
   processStatus = function(service) {
     var deferred = Q.defer();
     controller.data = service.data;
+    if (controller.errorMessage == null && service.data[0].errorMessage !== null) {
+      controller.errorMessage = service.data[0].error_message;
+      controller.showErrorMessage = true;
+      setTimeout(function() { 
+        controller.showErrorMessage = false; 
+        controller.errorMessage = null; 
+      }, 3000);
+    };
     controller.topics = [];
     controller.lastUpdate = new Date;
     _.each(controller.data, function(source, ia) {
@@ -215,5 +223,3 @@ EmqueApp.controller('status', function(controller) {
 
   initialize();
 });
-
-

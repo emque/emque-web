@@ -3,7 +3,7 @@ require "faraday"
 module Emque
   class Web
     class Source
-      attr_reader :errors, :host, :app
+      attr_reader :errors, :host, :app, :error_message
 
       def initialize(host)
         self.host = host
@@ -48,12 +48,7 @@ module Emque
       end
 
       def up(topic_name)
-        Thread.new {
-          status.join
-          if has_topic?(topic_name)
-            get("/control/#{topic_name}/up", :timeout => 10)
-          end
-        }
+        get("/control/#{topic_name}/up", :timeout => 10)
       end
 
       def topics
@@ -69,6 +64,7 @@ module Emque
           :app => app,
           :host => host,
           :errors => errors,
+          :error_message => error_message,
           :workers => workers
         }
       end
@@ -108,12 +104,14 @@ module Emque
         }
         @errors = json["errors"]
         @app = json["app"]
+        @error_message = json["error_message"]
       end
 
       def reset
         @workers = {}
         @errors = -1
         @app = :unknown
+        @error_message = ""
       end
     end
   end

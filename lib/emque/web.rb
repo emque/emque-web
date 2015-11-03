@@ -61,9 +61,10 @@ module Emque
     end
 
     put "/up" do
-      render_stats do |stats|
-        stats.host_action(:up, params["host"], params["topic"])
-      end
+      stats = Emque::Web::Stats.new
+      resp = stats.host_action(:up, params["host"], params["topic"])
+
+      [resp.status, {}, Oj.dump([Oj.load(resp.body)])]
     end
 
     # HELPERS
@@ -93,4 +94,3 @@ module Emque
     end
   end
 end
-
